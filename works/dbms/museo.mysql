@@ -1,0 +1,110 @@
+CREATE DATABASE museo_biglietteria;
+
+USE museo_biglietteria;
+
+CREATE TABLE __contenuto__ (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(95) NOT NULL
+);
+
+INSERT INTO __contenuto__ (nome)
+VALUES
+  ('categoria'), ('documento'), ('serivizio');
+
+CREATE TABLE __tipologia__ (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_contenuto INT UNSIGNED NOT NULL,
+  nome VARCHAR(95) NOT NULL,
+  testo VARCHAR(255),
+  costo FLOAT UNSIGNED,
+
+  CONSTRAINT fk_contenuto
+  FOREIGN KEY (id_contenuto)
+    REFERENCES __contenuto__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+INSERT INTO __tipologia__
+  (id_contenuto, costo, testo, nome)
+VALUES
+  (1, NULL, NULL, 'anziano'),
+  (2, NULL, NULL, 'fiscale'),
+  (2, NULL, NULL, 'patente'),
+  (3, 2,50, 'descrizione', 'catalogo'),
+  (3, 5.00, 'descrizione', 'audioguida'),
+  (3, 9.90, 'descrizione', 'accompagnatore');
+
+CREATE TABLE categoria (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_categoria INT UNSIGNED NOT NULL,
+  id_documento INT UNSIGNED NOT NULL,
+  titolo VARCHAR(255) NOT NULL,
+  sconto INT UNSIGNED NOT NULL,
+
+  CONSTRAINT fk_categoria_t
+  FOREIGN KEY (id_categoria)
+    REFERENCES __tipologia__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_documento_t
+  FOREIGN KEY (id_documento)
+    REFERENCES __tipologia__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE esposizio (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  titolo VARCHAR(127) NOT NULL,
+  prezzo FLOAT UNSIGNED NOT NULL,
+  data_apertura DATETIME,
+  data_chiusura DATETIME,
+);
+
+CREATE TABLE biglietto (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  id_categoria INT UNSIGNED NOT NULL,
+  id_esposizio INT UNSIGNED NOT NULL,
+  data_scadenza DATETIME,
+
+  CONSTRAINT fk_categoria
+  FOREIGN KEY (id_categoria)
+    REFERENCES categoria (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_esposizio
+  FOREIGN KEY (id_esposizio)
+    REFERENCES esposizio (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE biglietto_serivizio (
+  id_biglietto INT UNSIGNED NOT NULL,
+  id_serivizio INT UNSIGNED NOT NULL,
+
+  CONSTRAINT fk_biglietto
+  FOREIGN KEY (id_biglietto)
+    REFERENCES biglietto (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_serivizio
+  FOREIGN KEY (id_serivizio)
+    REFERENCES __tipologia__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT pk_biglietto_serivizio
+  PRIMARY KEY (id_biglietto, id_serivizio)
+);
+
+-- AGGIUNGERE CREDENZIALI PER LOGIN
+-- GESTIONE PER ACCOMPAGNATORI
+
+/*
+CREATE TABLE clientela (
+  email_login VARCHAR(255) NOT NULL UNIQUE,
+  passwd_hash VARCHAR(127) NOT NULL,
+  passwd_salt INT UNSIGNED NOT NULL,
+);
+*/

@@ -1,0 +1,117 @@
+CREATE DATABASE multa_piccolo_comune;
+
+USE multa_piccolo_comune;
+
+CREATE TABLE marca_automobile (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(95) NOT NULL
+);
+
+INSERT INTO marca_automobile (nome)
+VALUES
+  ('citroen'), ('fiat'),
+
+CREATE TABLE lista_violazione (
+  id VARCHAR(15) PRIMARY KEY,
+  nome VARCHAR(95) NOT NULL
+);
+
+INSERT INTO lista_violazione (id, nome)
+VALUES
+  ('ABC', 'semaforo_rosso'), ('XYZ', 'eccesso_velocita');
+
+CREATE TABLE paese (
+  titolo VARCHAR(95) NOT NULL,
+  codice VARCHAR(15) NOT NULL,
+
+  CONSTRAINT pk_paese
+  PRIMARY KEY (titolo, codice)
+);
+
+CREATE TABLE indirizzo (
+  id_titolo VARCHAR(95) NOT NULL,
+  id_codice VARCHAR(15) NOT NULL,
+  strada VARCHAR(127) NOT NULL,
+  civico INT UNSIGNED NOT NULL,
+
+  CONSTRAINT fk_paese
+  FOREIGN KEY (id_titolo, id_codice)
+    REFERENCES paese (titolo, codice)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT pk_indirizzo
+  PRIMARY KEY (id_titolo, id_codice, strada, civico)
+);
+
+CREATE TABLE persona (
+  fiscale VARCHAR(15) PRIMARY KEY,
+  seriale VARCHAR(15) UNIQUE,
+  bool_polizia BOOL NOT NULL,
+  id_id_titolo VARCHAR(95) NOT NULL,
+  id_id_codice VARCHAR(15) NOT NULL,
+  id_strada VARCHAR(127) NOT NULL,
+  id_civico INT UNSIGNED NOT NULL,
+  nome VARCHAR(95) NOT NULL,
+
+  CONSTRAINT fk_indirizzo
+  FOREIGN KEY (id_id_titolo, id_id_codice, id_strada, id_civico)
+    REFERENCES indirizzo (id_titolo, id_codice, strada, civico)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE automobile (
+  targa VARCHAR(15) PRIMARY KEY,
+  modello VARCHAR(127) NOT NULL,
+  id_owner VARCHAR(15) NOT NULL,
+  id_marca INT UNSIGNED NOT NULL,
+
+  CONSTRAINT fk_owner
+  FOREIGN KEY (id_owner)
+    REFERENCES persona (fiscale)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_marca
+  FOREIGN KEY (id_marca)
+    REFERENCES marca_automobile (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE violazione (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_titolo VARCHAR(95) NOT NULL,
+  id_codice VARCHAR(15) NOT NULL,
+  id_tipologico VARCHAR(15) NOT NULL,
+  id_automobile VARCHAR(15) NOT NULL,
+  id_polizia VARCHAR(15) NOT NULL,
+  id_autista VARCHAR(15) NOT NULL,
+  multa FLOAT UNSIGNED NOT NULL,
+  epoca TIMESTAMP,
+
+  CONSTRAINT fk_tipologico
+  FOREIGN KEY (id_tipologico)
+    REFERENCES lista_violazione (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_automobile
+  FOREIGN KEY (id_automobile)
+    REFERENCES automobile (targa)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_polizia
+  FOREIGN KEY (id_polizia)
+    REFERENCES persona (fiscale)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_autista
+  FOREIGN KEY (id_autista)
+    REFERENCES persona (fiscale)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_cittadella
+  FOREIGN KEY (id_titolo, id_codice)
+    REFERENCES paese (titolo, codice)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+);
