@@ -1,0 +1,60 @@
+CREATE DATABASE onlus_donatefor;
+
+USE onlus_donatefor;
+
+CREATE TABLE __categoria__ (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(95) NOT NULL
+);
+
+INSERT INTO __categoria__ (nome)
+VALUES
+  ('beneficiario'), ('donatore'), ('onlus');
+
+CREATE TABLE donatore (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_categoria INT UNSIGNED NOT NULL,
+  titolo VARCHAR(95) NOT NULL,
+
+  CONSTRAINT fk_categoria
+  FOREIGN KEY (id_categoria)
+    REFERENCES __categoria__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE progetto (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_beneficiario INT UNSIGNED NOT NULL,
+  id_onlus INT UNSIGNED NOT NULL,
+  quota_finale INT UNSIGNED NOT NULL,
+  quota_premio INT UNSIGNED NOT NULL,
+  quota_soglia INT UNSIGNED NOT NULL,
+  data_fine DATETIME NOT NULL,
+  titolo VARCHAR(95) NOT NULL,
+  descrizione VARCHAR(95) NOT NULL,
+
+  CONSTRAINT fk_onlus
+  FOREIGN KEY (id_onlus)
+    REFERENCES __categoria__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE finanziamento (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  id_progetto INT UNSIGNED NOT NULL,
+  id_donatore INT UNSIGNED NOT NULL,
+  importo INT UNSIGNED NOT NULL
+
+  CONSTRAINT fk_progetto
+  FOREIGN KEY (id_progetto)
+    REFERENCES progetto (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_donatore
+  FOREIGN KEY (id_donatore)
+    REFERENCES __categoria__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
