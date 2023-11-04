@@ -1,0 +1,115 @@
+CREATE DATABASE plant_business;
+
+USE plant_business;
+
+SOURCE ../lib/tipologia.mysql;
+SOURCE ../lib/indirizzo.mysql;
+SOURCE ../lib/persona.mysql;
+
+-- Aggiungi codice fornitore
+ALTER TABLE persona
+ADD seriale VARCHAR(15) UNIQUE;
+
+INSERT INTO __item__ (name)
+VALUES
+  ('colorazione'),
+  ('provenienza'),
+  ('terreno'),
+  ('persona');
+
+INSERT INTO __list__
+  (id_item, name)
+VALUES
+  (1, 'rosso'), (1, 'giallo'), (1, 'blue'), (1, 'arancio'), (1, 'violetto'),
+  (2, 'Cina'), (2, 'Giappone'), (2, 'Hawaii'),
+  (3, 'argilla'), (3, 'composto'), (3, 'sabbia'), (3, 'universale');
+
+INSERT INTO __list__
+  (id_item, name)
+VALUES
+  (4, 'fornitore'),
+  (4, 'privato'),
+  (4, 'azienda');
+
+CREATE TABLE specie (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_origine INT UNSIGNED NOT NULL,
+  id_terreno INT UNSIGNED NOT NULL,
+  esotica BOOL NOT NULL,
+  interno BOOL NOT NULL,
+  nome_comune VARCHAR(95) NOT NULL,
+  nome_latino VARCHAR(95) NOT NULL,
+
+  CONSTRAINT fk_specie_id_origine
+  FOREIGN KEY (id_origine)
+    REFERENCES __list__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_specie_id_terreno
+  FOREIGN KEY (id_terreno)
+    REFERENCES __list__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE pianta (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_specie INT UNSIGNED NOT NULL,
+  id_colore INT UNSIGNED NOT NULL,
+  fiorita BOOL NOT NULL,
+
+  CONSTRAINT fk_pianta_id_specie
+  FOREIGN KEY (id_specie)
+    REFERENCES specie (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_pianta_id_colore
+  FOREIGN KEY (id_colore)
+    REFERENCES __list__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE prezzo (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_specie INT UNSIGNED NOT NULL,
+  tempo_fine TIMESTAMP NOT NULL,
+  costo_euro FLOAT UNSIGNED NOT NULL,
+
+  CONSTRAINT fk_prezzo_id_specie
+  FOREIGN KEY (id_specie)
+    REFERENCES specie (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE acquisto (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_specie INT UNSIGNED NOT NULL,
+  id_prezzo INT UNSIGNED NOT NULL,
+  id_fornitore INT UNSIGNED NOT NULL,
+  id_clientela INT UNSIGNED NOT NULL,
+  pezzi INT UNSIGNED NOT NULL,
+  epoca TIMESTAMP,
+
+  CONSTRAINT fk_acquisto_id_specie
+  FOREIGN KEY (id_specie)
+    REFERENCES specie (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_acquisto_id_prezzo
+  FOREIGN KEY (id_prezzo)
+    REFERENCES prezzo (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_acquisto_id_fornitore
+  FOREIGN KEY (id_fornitore)
+    REFERENCES __list__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_acquisto_id_clientela
+  FOREIGN KEY (id_clientela)
+    REFERENCES __list__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);

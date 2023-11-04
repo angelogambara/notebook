@@ -1,0 +1,23 @@
+SOURCE ../lib/tipologia.mysql;
+SOURCE ../lib/indirizzo.mysql;
+
+CREATE TABLE IF NOT EXISTS persona (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_tipologia INT UNSIGNED NOT NULL,
+  id_indirizzo INT UNSIGNED NOT NULL,
+  fiscale VARCHAR(15) UNIQUE,
+  partita VARCHAR(15) UNIQUE,
+  nome VARCHAR(95) NOT NULL,
+  descrizione VARCHAR(1024),
+
+  CONSTRAINT fk_persona_id_tipologia
+  FOREIGN KEY (id_tipologia)
+    REFERENCES __list__ (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_persona_id_indirizzo
+  FOREIGN KEY (id_indirizzo)
+    REFERENCES indirizzo (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);

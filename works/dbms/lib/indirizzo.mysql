@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS paese (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  titolo VARCHAR(95) NOT NULL, -- Paese minuscolo (città)
+  codice VARCHAR(15) NOT NULL, -- Aviamento postale (CAP)
+
+  CONSTRAINT uq_paese
+  UNIQUE (titolo, codice)
+);
+
+CREATE TABLE IF NOT EXISTS indirizzo (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_paese INT UNSIGNED NOT NULL,
+  strada VARCHAR(127) NOT NULL,
+  civico INT UNSIGNED NOT NULL,
+
+  CONSTRAINT fk_indirizzo_id_paese
+  FOREIGN KEY (id_paese)
+    REFERENCES paese (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT pk_indirizzo
+  UNIQUE (id_paese, strada, civico)
+);
