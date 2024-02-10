@@ -23,8 +23,8 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val postalAddresses = mutableListOf(
-            PostalAddress(
+        val addresses = mutableListOf(
+            Address(
                 "Claudio Verdi",
                 "via Roma",
                 35,
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                 "Santa Maria Capua Vetere",
                 "CE",
             ),
-            PostalAddress(
+            Address(
                 "Claudio Rossi",
                 "via Roma",
                 35,
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 "Santa Maria Capua Vetere",
                 "CE",
             ),
-            PostalAddress(
+            Address(
                 "Giorgio Verdi",
                 "via Roma",
                 35,
@@ -50,16 +50,16 @@ class MainActivity : AppCompatActivity() {
             ),
         )
 
-        val postalAddressAdapter = PostalAddressAdapter(postalAddresses) {
+        val adapter = Adapter(addresses) {
             Toast.makeText(
                 applicationContext,
-                postalAddresses[it].name,
+                addresses[it].name,
                 Toast.LENGTH_SHORT,
             ).show()
         }
 
         recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.adapter = postalAddressAdapter
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
 
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                 val fromPosition = viewHolder.adapterPosition
                 val toPosition = target.adapterPosition
 
-                Collections.swap(postalAddresses, fromPosition, toPosition)
+                Collections.swap(addresses, fromPosition, toPosition)
                 recyclerView.adapter?.notifyItemMoved(fromPosition, toPosition)
 
                 return true
@@ -88,11 +88,11 @@ class MainActivity : AppCompatActivity() {
 
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        postalAddresses.removeAt(position)
+                        addresses.removeAt(position)
                         recyclerView.adapter?.notifyItemRemoved(position)
                     }
                     ItemTouchHelper.RIGHT -> {
-                        postalAddresses.add(position, postalAddresses[position])
+                        addresses.add(position, addresses[position])
                         recyclerView.adapter?.notifyItemInserted(position)
                         recyclerView.adapter?.notifyItemChanged(position + 1)
                     }

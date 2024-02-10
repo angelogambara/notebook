@@ -2,11 +2,11 @@ package com.example.recyclerview;
 
 import java.util.Objects;
 
-public class PostalAddressJava {
+public class AddressJava {
     private String name, streetName, postcode, town, provinceAbbr;
     private Integer streetNumber;
 
-    public PostalAddressJava(
+    public AddressJava(
             String name,
             String streetName,
             Integer streetNumber,

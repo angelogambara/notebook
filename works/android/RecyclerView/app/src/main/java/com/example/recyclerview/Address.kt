@@ -1,7 +1,7 @@
 package com.example.recyclerview
 
 @Suppress("MemberVisibilityCanBePrivate")
-data class PostalAddress(
+data class Address(
     val name: String,
     val streetName: String,
     val streetNumber: Int,
