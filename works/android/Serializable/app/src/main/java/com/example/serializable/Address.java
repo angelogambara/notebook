@@ -1,12 +1,13 @@
-package com.example.recyclerview;
+package com.example.serializable;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class AddressJava {
+public class Address implements Serializable {
     private String name, streetName, postcode, town, provinceAbbr;
     private Integer streetNumber;
 
-    public AddressJava(
+    public Address(
             String name,
             String streetName,
             Integer streetNumber,
@@ -28,7 +29,7 @@ public class AddressJava {
 
     public void setName(String name) {
         if (name.length() == 0)
-            throw new IllegalArgumentException("name: Must not be empty");
+            throw new IllegalArgumentException("Must not be empty");
 
         this.name = name;
     }
@@ -39,7 +40,7 @@ public class AddressJava {
 
     public void setStreetName(String streetName) {
         if (streetName.length() == 0)
-            throw new IllegalArgumentException("streetName: Must not be empty");
+            throw new IllegalArgumentException("Must not be empty");
 
         this.streetName = streetName;
     }
@@ -50,7 +51,7 @@ public class AddressJava {
 
     public void setStreetNumber(Integer streetNumber) {
         if (streetNumber < 1)
-            throw new IllegalArgumentException("streetNumber: Must be a positive number");
+            throw new IllegalArgumentException("Must be a positive number");
 
         this.streetNumber = streetNumber;
     }
@@ -62,7 +63,7 @@ public class AddressJava {
     public void setPostcode(String postcode) {
         for (int i = 0; i < 4; i++)
             if (postcode.charAt(i) < '0' || postcode.charAt(i) > '9' || postcode.length() != 5)
-                throw new IllegalArgumentException("postcode: Must be a 5 digits string");
+                throw new IllegalArgumentException("Must be 5 digit long");
 
         this.postcode = postcode;
     }
@@ -73,7 +74,7 @@ public class AddressJava {
 
     public void setTown(String town) {
         if (town.length() == 0)
-            throw new IllegalArgumentException("town: Must not be empty");
+            throw new IllegalArgumentException("Must not be empty");
 
         this.town = town;
     }
@@ -84,7 +85,7 @@ public class AddressJava {
 
     public void setProvinceAbbr(String provinceAbbr) {
         if (provinceAbbr.length() != 2)
-            throw new IllegalArgumentException("provinceAbbr: Must be 2 chars long");
+            throw new IllegalArgumentException("Must be 2 chars long");
 
         this.provinceAbbr = provinceAbbr;
     }
