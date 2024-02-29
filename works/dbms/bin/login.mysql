@@ -1,0 +1,32 @@
+CREATE DATABASE noidella5d;
+
+USE noidella5d;
+
+CREATE TABLE user (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(128) NOT NULL,
+  hash VARCHAR(256) NOT NULL,
+  salt INT NOT NULL,
+  discount INT UNSIGNED,
+  is_admin BOOL NOT NULL
+);
+
+CREATE TABLE product (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(128) NOT NULL,
+  description VARCHAR(1024) NOT NULL,
+  price FLOAT NOT NULL
+);
+
+INSERT INTO user (name, hash, salt, discount, is_admin)
+VALUES
+  ('A', '0d744cfaebbcf2b1d3ffe3fadd050a83456a90e3267caeadd9711785b0c54a94', 73, 30, 0),
+  ('B', 'dc874c50220adc3e3bb286b5bdf745bf3c5541d8f86d08b80b7eee8a8ff83150', 95, 20, 0),
+  ('C', 'fb44388faf2a4c02c6e64ada837ee39b2af11e805c12a9f25390281d3b65c87c', 32, 10, 0),
+  ('admin', '30cdc6c9b0a19ff36d0f66103a995876247b5c102087199051c13defe792ba15', 10, NULL, 1);
+
+INSERT INTO product (name, description, price)
+VALUES
+  ('Bananas', 'Description', 4.90),
+  ('Oranges', 'Description', 3.20),
+  ('Apples', 'Description', 1.50);
