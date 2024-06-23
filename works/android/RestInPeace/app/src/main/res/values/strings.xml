@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">RestInPeace</string>
+    <string name="phone">Cellulare</string>
+    <string name="surname">Cognome</string>
+    <string name="name">Nome</string>
+    <string name="method">Metodo HTTP</string>
+    <string name="send">Invio</string>
+    <string name="http_status_code">Codice HTTP</string>
+    <string name="http_response">Risposta HTTP</string>
+</resources>

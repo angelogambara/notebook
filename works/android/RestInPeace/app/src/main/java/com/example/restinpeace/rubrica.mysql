@@ -1,0 +1,1 @@
+CREATE TABLE rubrica (cognome VARCHAR(23), nome VARCHAR(23), telefono VARCHAR(23), CONSTRAINT pk_rubrica PRIMARY KEY (nome, cognome))

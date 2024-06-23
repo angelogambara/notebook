@@ -1,0 +1,10 @@
+@import url("merriweather.css");
+@import url("roboto.css");
+
+table, th, td {
+  border: 1px solid;
+  border-collapse: collapse;
+  padding: 4px 16px;
+}
+
+th { font-weight: bold; }

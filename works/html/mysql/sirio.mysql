@@ -1,0 +1,185 @@
+CREATE DATABASE sirio;
+USE sirio;
+
+CREATE TABLE controllore (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  data_nascita DATE NOT NULL,
+  nome VARCHAR(127) NOT NULL
+);
+
+CREATE TABLE funzionario (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  hash VARCHAR(65) NOT NULL UNIQUE,
+  mail VARCHAR(65) NOT NULL UNIQUE,
+  user VARCHAR(65) NOT NULL UNIQUE,
+  data_nascita DATE NOT NULL,
+  nome VARCHAR(127) NOT NULL
+);
+
+CREATE TABLE stato (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(127) NOT NULL UNIQUE
+);
+
+CREATE TABLE passeggiero (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_stato_mio INT UNSIGNED NOT NULL,
+  id_stato_doc INT UNSIGNED NOT NULL,
+  passaporto VARCHAR(10) NOT NULL UNIQUE,
+  data_nascita DATE NOT NULL,
+  nome VARCHAR(127) NOT NULL,
+
+  CONSTRAINT fk_passeggiero_id_stato_mio
+  FOREIGN KEY (id_stato_mio)
+    REFERENCES stato (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_passeggiero_id_stato_doc
+  FOREIGN KEY (id_stato_doc)
+    REFERENCES stato (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE aereoporto (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_stato INT UNSIGNED NOT NULL,
+  nome VARCHAR(127) NOT NULL,
+
+  CONSTRAINT fk_aereoporto_id_stato
+  FOREIGN KEY (id_stato)
+    REFERENCES stato (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT pk_aereoporto
+  UNIQUE (id_stato, nome)
+);
+
+CREATE TABLE rotta (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_aereoporto_inizio INT UNSIGNED NOT NULL,
+  id_aereoporto_finale INT UNSIGNED NOT NULL,
+
+  CONSTRAINT fk_rotta_id_aereoporto_inizio
+  FOREIGN KEY (id_aereoporto_inizio)
+    REFERENCES aereoporto (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_rotta_id_aereoporto_finale
+  FOREIGN KEY (id_aereoporto_finale)
+    REFERENCES aereoporto (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT pk_rotta
+  UNIQUE (id_aereoporto_inizio, id_aereoporto_finale)
+);
+
+CREATE TABLE merce (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  descrizione VARCHAR(1023) NOT NULL,
+  kg FLOAT UNSIGNED NOT NULL,
+  categoria ENUM(
+    'alimentari',
+    'oggetti inusuali',
+    'abbigliamento') NOT NULL
+);
+
+CREATE TABLE controllo (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  id_controllore INT UNSIGNED NOT NULL,
+  id_funzionario INT UNSIGNED NOT NULL,
+  id_passeggiero INT UNSIGNED NOT NULL,
+  id_merce INT UNSIGNED NOT NULL,
+  id_rotta INT UNSIGNED NOT NULL,
+  ts_inizio TIMESTAMP NOT NULL,
+  ts_finale TIMESTAMP NOT NULL,
+  motivazione VARCHAR(1023) NOT NULL,
+  descrizione VARCHAR(1023) NOT NULL,
+  dazio FLOAT UNSIGNED NOT NULL,
+  esito ENUM(
+    'nessuna segnalazione',
+    'fermo del passeggero',
+    'merce respinta') NOT NULL,
+
+  CONSTRAINT fk_controllo_id_controllore
+  FOREIGN KEY (id_controllore)
+    REFERENCES controllore (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_controllo_id_funzionario
+  FOREIGN KEY (id_funzionario)
+    REFERENCES funzionario (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_controllo_id_passeggiero
+  FOREIGN KEY (id_passeggiero)
+    REFERENCES passeggiero (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_controllo_id_rotta
+  FOREIGN KEY (id_rotta)
+    REFERENCES rotta (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_controllo_id_merce
+  FOREIGN KEY (id_merce)
+    REFERENCES merce (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+INSERT INTO controllore (data_nascita, nome)
+VALUES ('1970-01-01', 'Bob');
+
+INSERT INTO funzionario (hash, mail, user, data_nascita, nome)
+VALUES ('', 'alice@easyjet.com', 'alice', '1970-01-01', 'Alice');
+
+INSERT INTO stato (nome)
+VALUES ('Germania'), ('Italia');
+
+INSERT INTO passeggiero
+  (
+    id_stato_mio,
+    id_stato_doc,
+    passaporto,
+    data_nascita,
+    nome
+  )
+VALUES
+  (2, 2, 'KK5002535', '2004-06-21', 'Angelo'),
+  (2, 2, 'KK5004535', '2004-06-21', 'Alessandro'),
+  (2, 2, 'KK5002533', '2009-03-12', 'Riccardo');
+
+INSERT INTO aereoporto (id_stato, nome)
+VALUES (1, 'Berlin-Brandenburg'), (2, 'Milano-Linate');
+
+INSERT INTO rotta (id_aereoporto_inizio, id_aereoporto_finale)
+VALUES (1, 2), (2, 1);
+
+INSERT INTO merce (descrizione, kg, categoria)
+VALUES
+  ('Il nome della rosa ', 1.0, 2),
+  ('Pantaloni strappati', 0.1, 3),
+  ('Mezzo litro H2O', 0.5, 1);
+
+INSERT INTO controllo
+  (
+    id_controllore,
+    id_funzionario,
+    id_passeggiero,
+    id_merce,
+    id_rotta,
+    ts_inizio,
+    ts_finale,
+    motivazione,
+    descrizione,
+    dazio,
+    esito
+  )
+VALUES
+  (1, 1, 2, 3, 1, '1970-01-01 02:00:00', '1970-01-02 02:00:00',
+    'Definitivamente un bug', 'Uscita didattica', 00.0, 1),
+  (1, 1, 3, 2, 1, '1970-01-01 02:00:00', '1970-02-01 02:00:00',
+    'Definitivamente un bug', 'Uscita didattica', 30.0, 2),
+  (1, 1, 1, 1, 2, '1970-01-01 02:00:00', '1971-01-01 02:00:00',
+    'Definitivamente un bug', 'Uscita didattica', 15.0, 3);

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:background="?attr/colorPrimary"
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/httpResponse"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:text="Response"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/httpStatus"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_width="wrap_content"
+        android:text="Status"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSend"
+        app:layout_constraintEnd_toEndOf="@+id/buttonSend"
+        app:layout_constraintStart_toStartOf="@+id/buttonSend"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/buttonSend"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_width="wrap_content"
+        android:text="@string/send"
+        app:layout_constraintBottom_toBottomOf="@+id/inputMethod"
+        app:layout_constraintStart_toEndOf="@+id/inputMethod"
+        app:layout_constraintTop_toTopOf="@+id/inputMethod" />
+
+    <EditText
+        android:autofillHints="POST"
+        android:ems="10"
+        android:hint="@string/method"
+        android:id="@+id/inputMethod"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:minHeight="48dp"
+        android:textColorHint="?attr/colorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/httpResponse" />
+
+    <EditText
+        android:autofillHints="Rossi"
+        android:ems="10"
+        android:hint="@string/surname"
+        android:id="@+id/inputSurname"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:minHeight="48dp"
+        android:textColorHint="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="@+id/inputMethod"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputMethod"
+        app:layout_constraintTop_toBottomOf="@+id/inputMethod" />
+
+    <EditText
+        android:autofillHints="Mario"
+        android:ems="10"
+        android:hint="@string/name"
+        android:id="@+id/inputName"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:minHeight="48dp"
+        android:textColorHint="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="@+id/inputSurname"
+        app:layout_constraintStart_toStartOf="@+id/inputSurname"
+        app:layout_constraintTop_toBottomOf="@+id/inputSurname" />
+
+    <EditText
+        android:autofillHints="123-456-7890"
+        android:ems="10"
+        android:hint="@string/phone"
+        android:id="@+id/inputPhone"
+        android:inputType="phone"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:minHeight="48dp"
+        android:textColorHint="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="@+id/inputName"
+        app:layout_constraintStart_toStartOf="@+id/inputName"
+        app:layout_constraintTop_toBottomOf="@+id/inputName" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
